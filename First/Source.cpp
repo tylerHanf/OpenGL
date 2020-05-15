@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "glm/glm.hpp"
-#include "Utils.h"
+#include "../Utils/Utils.h"
 
 #define numVAOs 1
 

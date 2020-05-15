@@ -11,8 +11,8 @@
 GLuint renderingProgram;
 GLuint vao[numVAOs];
 
-const char* VSHADER_FILE = "GLSL\\vertex.glsl";
-const char* FSHADER_FILE = "GLSL\\fragment.glsl";
+const char* VSHADER_FILE = "GLSL/vertex.glsl";
+const char* FSHADER_FILE = "GLSL/fragment.glsl";
 
 float x = 0.0f;
 float inc = 0.01f;

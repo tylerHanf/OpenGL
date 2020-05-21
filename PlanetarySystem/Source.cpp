@@ -12,10 +12,13 @@
 #include <stdio.h>
 
 #define numVAOs 1
-#define numVBOs 2
+#define numVBOs 3
 
 float cameraX, cameraY, cameraZ;
-float cubeLocX, cubeLocY, cubeLocZ, pyrLocX, pyrLocY, pyrLocZ;
+float cubeLocX, cubeLocY, cubeLocZ;
+float pyrLocX, pyrLocY, pyrLocZ;
+float tetraLocX, tetraLocY, tetraLocZ;
+
 GLuint renderingProgram;
 GLuint vao[numVAOs];
 GLuint vbo[numVBOs];
@@ -52,6 +55,13 @@ void setupVertices(void) {
                 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f
         };
 
+	float tetraPositions[36] = {
+		-1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, -1.0f, 1.0f,
+		-1.0f, -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f
+	};
+
         glGenVertexArrays(numVAOs, vao);
         glBindVertexArray(vao[0]);
         glGenBuffers(numVBOs, vbo);
@@ -61,6 +71,9 @@ void setupVertices(void) {
 
         glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(pyramidPositions), pyramidPositions, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tetraPositions), tetraPositions, GL_STATIC_DRAW);
 }
 
 void init(GLFWwindow* window) {
@@ -68,6 +81,7 @@ void init(GLFWwindow* window) {
         cameraX = 0.0f; cameraY = 0.0f; cameraZ = 20.0f;
         cubeLocX = 0.0f; cubeLocY = -2.0f; cubeLocZ = 0.0f;
         pyrLocX = 3.0f; pyrLocY = 2.0f; pyrLocZ = -8.0f;
+	tetraLocX = -1.0f; tetraLocY = 4.0f; tetraLocZ = 2.0f;
         setupVertices();
 }
 
@@ -83,7 +97,7 @@ void display(GLFWwindow* window, double currentTime) {
         aspect = (float)width / (float)height;
         pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
 
-        vMat = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraX, -cameraY, -cameraZ));
+        vMat = glm::lookAt(glm::vec3(cameraX, cameraY*5.0, cameraZ), glm::vec3(pyrLocX, pyrLocY, pyrLocZ), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mvStack.push(vMat);
 
@@ -106,6 +120,23 @@ void display(GLFWwindow* window, double currentTime) {
         glDrawArrays(GL_TRIANGLES, 0, 18);
 	mvStack.pop();
 
+	//Tetra->Planet
+	mvStack.push(mvStack.top());
+
+	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, sin((float)currentTime)*4.0, 
+				cos((float)currentTime)*8.0));
+
+        glUniformMatrix4fv(mvLoc, 1, GL_FALSE, glm::value_ptr(mvStack.top()));
+
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(0);
+
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDrawArrays(GL_TRIANGLES, 0, 12);
+	mvStack.pop();
+
 	//Cube->Planet
 	mvStack.push(mvStack.top());
 	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)currentTime)*4.0, 0.0f, 
@@ -122,10 +153,11 @@ void display(GLFWwindow* window, double currentTime) {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+	mvStack.pop();
 
 	//Small Cube->Moon
 	mvStack.push(mvStack.top());
-	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)currentTime)*2.0, 0.0,
+	mvStack.top() *= glm::translate(glm::mat4(1.0f), glm::vec3(sin((float)currentTime)*4.0, 0.0,
 				cos((float)currentTime*2.0)));
 	mvStack.top() *= glm::rotate(glm::mat4(1.0f), (float) currentTime, glm::vec3(1.0, 0.0, 0.0));
 	mvStack.top() *= glm::scale(glm::mat4(1.0f), glm::vec3(0.25f, 0.25f, 0.25f)); 
@@ -134,7 +166,7 @@ void display(GLFWwindow* window, double currentTime) {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	mvStack.pop(); mvStack.pop(); mvStack.pop(); mvStack.pop();
+ 	mvStack.pop(); mvStack.pop(); mvStack.pop(); mvStack.pop();
 }
 
 int main(void) {

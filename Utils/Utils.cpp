@@ -1,6 +1,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SOIL/SOIL.h>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -123,6 +124,17 @@ GLuint createShaderProgram(const char *vp, const char *fp) {
 		printProgramLog(vfProgram);
 	}
 	return vfProgram;
+}
+
+/* 
+ * Load texture with given filepath using SOIL 
+*/
+GLuint loadTexture(const char *textImagePath) {
+	GLuint textureID;
+	textureID = SOIL_load_OGL_texture(textImagePath,
+			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (textureID == 0) std::cout << "Could not find texture file" << textImagePath << std::endl;
+	return textureID;
 }
 
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}

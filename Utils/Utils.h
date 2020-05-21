@@ -18,6 +18,9 @@ std::string readShaderSource(const char *filePath);
 //Make shader program with just vertex and frag shader
 GLuint createShaderProgram(const char *vp, const char *fp);
 
+//Load image texture
+GLuint loadTexture(const char* textImagePath);
+
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *gp, const char *fp){}

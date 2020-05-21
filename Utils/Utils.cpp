@@ -128,7 +128,6 @@ GLuint createShaderProgram(const char *vp, const char *fp) {
 
 /* 
  * Load texture with given filepath using SOIL 
-*/
 GLuint loadTexture(const char *textImagePath) {
 	GLuint textureID;
 	textureID = SOIL_load_OGL_texture(textImagePath,
@@ -137,7 +136,7 @@ GLuint loadTexture(const char *textImagePath) {
 	if (textureID == 0) std::cout << "Could not find texture file" << textImagePath << std::endl;
 	return textureID;
 }
-
+*/
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *gp, const char *fp){}

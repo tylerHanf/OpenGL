@@ -1,11 +1,11 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <SOIL/SOIL.h>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include "Utils.h"
+#include <SOIL2/SOIL2.h>
 
 /*
  * Shader error log
@@ -133,6 +133,7 @@ GLuint loadTexture(const char *textImagePath) {
 	GLuint textureID;
 	textureID = SOIL_load_OGL_texture(textImagePath,
 			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	std::cout << "Working" << std::endl;
 	if (textureID == 0) std::cout << "Could not find texture file" << textImagePath << std::endl;
 	return textureID;
 }

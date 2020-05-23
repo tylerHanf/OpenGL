@@ -1,3 +1,6 @@
+#ifndef UTILS_H
+#define UTILS_H
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <iostream>
@@ -24,3 +27,5 @@ GLuint loadTexture(const char* textImagePath);
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *gp, const char *fp){}
+
+#endif

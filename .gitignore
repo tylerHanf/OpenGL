@@ -358,3 +358,5 @@ MigrationBackup/
 
 *.exe
 *.o
+*.gch
+*.swp

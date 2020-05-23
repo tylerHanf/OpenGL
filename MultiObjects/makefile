@@ -1,13 +1,13 @@
 CC=g++
-DEPS=../Utils/Utils.h
-UTILS=../Utils/Utils.o
+DEPS=Utils.h
+VPATH=../Utils
 LIBS=-lGLEW -lGL -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor
+OBJECTS=Source.o Utils.o
+EXEC=first.exe
 
-first.exe: Source.o Utils.o
-	$(CC) Source.o $(UTILS) -o first.exe $(LIBS)
+$(EXEC): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXEC) $(LIBS)
 
-Source.o: Source.cpp $(DEPS)
-	$(CC) -c Source.cpp
-
-Utils.o:
-	$(MAKE) -C ../Utils
+.PHONY : clean
+clean : 
+	rm first.exe ./*.o

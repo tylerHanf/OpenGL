@@ -8,15 +8,14 @@
  * Holds data for imported .OBJ model
  */
 class ImportedModel {
-	std::vector<float> vertices;
-	std::vector<float> texels;
-	std::vector<float> normals;
-	int numVertices;
-
         public:
+			std::vector<float> vertices;
+			std::vector<float> texels;
+			std::vector<float> normals;
+			int numVertices;
 
-                ImportedModel(const char* filename);
-                void printVertices(void);
+			ImportedModel(const char* filename);
+			void printVertices(void);
 };
 
 #endif

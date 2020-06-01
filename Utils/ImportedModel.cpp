@@ -31,8 +31,10 @@ void ImportedModel::printVertices() {
                 printf("Index: %d, Value: %f\n", k, texels.at(k));
         }
 
-	printf("Normal Verts:\n");
+        printf("Normal Verts:\n");
         for (int j=0; j < normals.size(); j++) {
                 printf("Index: %d, Value: %f\n", j, normals.at(j));
         }
+
+        printf("Number of Tri-Vertices: %d\n", numVertices);
 }

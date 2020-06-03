@@ -36,7 +36,7 @@ GLuint vbo[numVBOs];
 GLuint starTexture;
 unsigned char* texture;
 
-ImportedModel wheel("cube.obj");
+ImportedModel wheel("sphere.obj");
 
 GLuint mvLoc, projLoc;
 int width, height, textureWidth, textureHeight;
@@ -74,7 +74,7 @@ void setupTexture(const char* TfilePath) {
 }
 
 void init(GLFWwindow* window) {
-	move.speed = 0.2;
+	move.speed = 10.0f;
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 	renderingProgram = createShaderProgram("vertShader.glsl", "fragShader.glsl");
@@ -123,8 +123,8 @@ void display(GLFWwindow* window, double currentTime) {
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
 	mMat = glm::translate(glm::mat4(1.0f), glm::vec3(wheelLocX, wheelLocY, wheelLocZ));
-	mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, wheelMove));
-	mMat *= glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(1.0f, 0.0f, 0.0f));
+	mMat *= glm::translate(glm::mat4(1.0f), glm::vec3(wheelMove, 0.0f, 0.0f));
+	mMat *= glm::rotate(glm::mat4(1.0f), rotation, glm::vec3(0.0f, 0.0f, -1.0f));
 
 	mvMat = vMat * mMat;
 

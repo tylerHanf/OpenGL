@@ -27,6 +27,10 @@ std::vector<float> Importer::getNormals() {
 	return norms;
 }
 
+std::string Importer::getTexturePath() {
+	return texturePath;
+}
+
 /*
  * Read data from .OBJ file
  * Must push initial data into respective initial vectors
@@ -94,9 +98,28 @@ void Importer::readFile(const char* filename) {
 				input.clear();
 			}
 
+			else if(line[0] == 'm') {
+				line.erase(0, 7);
+				texturePath = getTextureName(line);
+			}
+
 			else {
 				continue;
 			}
 	}
 	file.close();
+}
+
+/**
+ * Gets the filepath for the texture that will be on the object
+ **/
+std::string Importer::getTextureName(std::string mtl_name) {
+	std::string line;
+	std::ifstream m_file(mtl_name.append(".mtl"));
+	while (std::getline(m_file, line)) {
+		if (line[0] == 'm') {
+			line.erase(0, 7);
+			return line;
+		}
+	}
 }

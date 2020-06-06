@@ -24,6 +24,7 @@ GLuint createShaderProgram(const char *vp, const char *fp);
 //Load image texture
 GLuint loadTexture(const char* textImagePath);
 
+void getPNGDim(std::string filepath, int *width, int *height);
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *gp, const char *fp){}

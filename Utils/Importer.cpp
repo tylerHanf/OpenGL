@@ -101,6 +101,7 @@ void Importer::readFile(const char* filename) {
 			else if(line[0] == 'm') {
 				line.erase(0, 7);
 				texturePath = getTextureName(line);
+				std::cout << texturePath << std::endl;
 			}
 
 			else {
@@ -114,12 +115,17 @@ void Importer::readFile(const char* filename) {
  * Gets the filepath for the texture that will be on the object
  **/
 std::string Importer::getTextureName(std::string mtl_name) {
+	std::string path = "/home/tball401/Documents/OpenGL/OpenGL/BasicGame/Assets/Objects/";
 	std::string line;
-	std::ifstream m_file(mtl_name.append(".mtl"));
-	while (std::getline(m_file, line)) {
-		if (line[0] == 'm') {
-			line.erase(0, 7);
-			return line;
+	path += mtl_name;
+	std::cout << path << std::endl;
+	std::ifstream m_file(path.c_str());
+	if (m_file.is_open()) {
+		while (std::getline(m_file, line)) {
+			if (line[0] == 'm') {
+				line.erase(0, 7);
+				return line;
+			}
 		}
 	}
 }

@@ -6,7 +6,7 @@
  * Default constructor
  **/
 Position::Position() {
-    position = glm::vec3(0.0f, 0.0f, 0.0f);
+    position = glm::vec3(8.0f, 0.0f, 0.0f);
 }
 
 /**

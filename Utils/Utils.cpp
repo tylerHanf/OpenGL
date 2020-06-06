@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <arpa/inet.h>
 #include "Utils.h"
 #include <SOIL2/SOIL2.h>
 
@@ -126,17 +127,17 @@ GLuint createShaderProgram(const char *vp, const char *fp) {
 	return vfProgram;
 }
 
-/* 
- * Load texture with given filepath using SOIL 
-GLuint loadTexture(const char *textImagePath) {
-	GLuint textureID;
-	textureID = SOIL_load_OGL_texture(textImagePath,
-			SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-	std::cout << "Working" << std::endl;
-	if (textureID == 0) std::cout << "Could not find texture file" << textImagePath << std::endl;
-	return textureID;
+void getPNGDim(std::string filepath, int *width, int *height) {
+	std::ifstream in(filepath);
+
+	in.seekg(16);
+	in.read((char*)width, 4);
+	in.read((char*)height, 4);
+
+	*width = ntohl(*width);
+	*height = ntohl(*height);
 }
-*/
+
 //GLuint createShaderProgram(const char *vp, const char *gp, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *fp){}
 //GLuint createShaderProgram(const char *vp, const char *tCS, const char* tES, const char *gp, const char *fp){}

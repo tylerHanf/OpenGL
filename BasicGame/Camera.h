@@ -13,8 +13,9 @@ class Camera {
     Position pos;
 
     public:
+        Camera();
         Camera(Position);
-        Position getPosition();
+        glm::vec3 getPosition();
         //Move camera by a given position
         void move(Position);
 };

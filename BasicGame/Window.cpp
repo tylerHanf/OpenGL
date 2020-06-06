@@ -1,8 +1,9 @@
-#include "Window.h"
-
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "Error.h"
+#include "Debug.h"
 #include <string>
+#include "Window.h"
 
 Window::Window() {
     screenWidth = 0;
@@ -17,11 +18,21 @@ Window::Window(int width, int height, std::string title) {
     screenWidth = width;
     screenHeight = height;
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 }
 
 GLFWwindow* Window::getWindow() {
     return window;
+}
+
+int* Window::getWidth() {
+    return &screenWidth;
+}
+
+int* Window::getHeight() {
+    return &screenHeight;
+}
+
+float Window::calcAspect() {
+    return (float) screenWidth / (float) screenHeight;
 }

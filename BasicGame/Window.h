@@ -14,6 +14,9 @@ class Window {
         ~Window();
         Window(int width, int height, std::string title);
         GLFWwindow* getWindow();
+        int* getWidth();
+        int* getHeight();
+        float calcAspect();
 };
 
 #endif

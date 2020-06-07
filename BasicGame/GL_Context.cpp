@@ -17,10 +17,10 @@
 
 GL_Context::GL_Context(LoadData *ld) { 
     init();
-    testSetup();
-    testTextLoad();
-    //loadVertsToGPU(ld->getVertices(), ld->getTexels(), ld->getVertIDs());
-    //loadTexToGPU(ld->getTextures(), ld->getTextIDs());
+    //testSetup();
+    //testTextLoad();
+    loadVertsToGPU(ld->getVertices(), ld->getTexels(), ld->getVertIDs());
+    loadTexToGPU(ld->getTextures(), ld->getTextIDs());
 }
 
 GL_Context::~GL_Context() {
@@ -31,30 +31,50 @@ GLFWwindow* GL_Context::getWindow() {
     return window;
 }
 
-void GL_Context::loadTexToGPU(std::vector<Texture*> *textures, std::vector<GLuint> *textIDs) {
+void GL_Context::loadTexToGPU(std::vector<Texture> &textures, std::vector<GLuint> &textIDs) {
     glEnable(GL_TEXTURE_2D);
-    glGenTextures(textures->size(), &(*textIDs)[0]);
-    for (int i=0; i<textures->size(); i++) {
-        textIDs->push_back(i);
-        glBindTexture(GL_TEXTURE_2D, (*textIDs)[i]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (*textures)[i]->width, (*textures)[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, (*textures)[i]->textureData);
+    glGenTextures(textures.size(), &textIDs[0]);
+    for (int i=0; i<textures.size(); i++) {
+        textIDs.push_back(textIDs.at(i));
+        glBindTexture(GL_TEXTURE_2D, textIDs.at(i));
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textures.at(i).width, textures.at(i).height, 0, GL_RGB, GL_UNSIGNED_BYTE, textures.at(i).textureData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
 
-void GL_Context::loadVertsToGPU(std::vector<std::vector<float>> *verts, std::vector<std::vector<float>> *texels, std::vector<int> *vertIDs) {
-    numVBOs = verts->size() + texels->size();
+void GL_Context::loadVertsToGPU(std::vector<std::vector<float>> &verts, std::vector<std::vector<float>> &texels, std::vector<int> &vertIDs) {
+    int numVerts = verts.at(0).size();
+    /*
+    float vertCoord[(*verts)[0].size()];
+    float textCoord[(*texels)[0].size()];
+    memcpy(vertCoord, (*verts)[0].data(), (*verts)[0].size());
+    memcpy(textCoord, (*texels)[0].data(), (texels->at(0)).size());
+    for (int i=0; i<(*verts)[0].size()-3; i+=3) {
+        std::cout << (*verts)[0][i];
+        std::cout << (*verts)[0][i+1];
+        std::cout << (*verts)[0][i+2] << std::endl;
+    }
+    std::cout << "------------------------------------------------------" << std::endl;
+
+    for (int i=0; i<(*verts)[0].size()-3; i+=3) {
+        std::cout << vertCoord[i];
+        std::cout << vertCoord[i+1];
+        std::cout << vertCoord[i+2] << std::endl;
+    }
+    */
+    numVBOs = verts.size() + texels.size();
     glGenVertexArrays(numVAOs, vao);
     glBindVertexArray(vao[0]);
     glGenBuffers(numVBOs, vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, verts->size()*4, &(*verts)[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, verts.at(0).size()*4, verts[0].data(), GL_STATIC_DRAW);
+    std::cout << verts.at(0).size() * 4 << std::endl;
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, texels->size()*4, &(*texels)[0], GL_STATIC_DRAW);
-    vertIDs->push_back(0);
+    glBufferData(GL_ARRAY_BUFFER, (texels.at(0)).size()*4, texels[0].data(), GL_STATIC_DRAW);
+    vertIDs.push_back(0);
     //Need to store vert buffer then texture buffer sequentually
     //in VBO, but must not duplicate vbo indices
     /*for (int i=0, j=0; i<verts->size(); i++, j+=2) {
@@ -92,7 +112,7 @@ GLuint* GL_Context::getVBO() {
 
 void GL_Context::display(ObjectData objData) {
     double currenTime = glfwGetTime();
-    //Object* player = objData.getObject(0);
+    Object* player = objData.getObject(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(renderingProgram);
 
@@ -103,11 +123,10 @@ void GL_Context::display(ObjectData objData) {
     aspect = (float)width / (float)height;
 
     pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
-    vMat = glm::lookAt(camera->getPosition(), glm::vec3(8.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    mMat = glm::translate(glm::mat4(1.0f), glm::vec3(8.0f, 0.0f, 0.0f));
-    /*vMat = glm::lookAt(camera->getPosition(), player->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+    //vMat = glm::lookAt(camera->getPosition(), glm::vec3(8.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //mMat = glm::translate(glm::mat4(1.0f), glm::vec3(8.0f, 0.0f, 0.0f));
+    vMat = glm::lookAt(camera->getPosition(), player->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
     mMat = glm::translate(glm::mat4(1.0f), player->getPosition());
-    */
 
     mvMat = vMat * mMat;
 
@@ -123,14 +142,14 @@ void GL_Context::display(ObjectData objData) {
     glEnableVertexAttribArray(1);
 
     glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, objData.getTextID(0));
-    glBindTexture(GL_TEXTURE_2D, rockTex);
+    glBindTexture(GL_TEXTURE_2D, objData.getTextID(0));
+    //glBindTexture(GL_TEXTURE_2D, rockTex);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    //glDrawArrays(GL_TRIANGLES, 0, player->getNumVertices());
-    glDrawArrays(GL_TRIANGLES, 0, 12);
+    glDrawArrays(GL_TRIANGLES, 0, player->getNumVertices());
+    //glDrawArrays(GL_TRIANGLES, 0, 12);
 }
 
 bool GL_Context::renderLoop(ObjectData objData) {

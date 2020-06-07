@@ -16,6 +16,7 @@ class ObjectData {
 
     public:
         ObjectData(LoadData* loadedData);
+        ~ObjectData();
         Object* getObject(std::size_t index);
         GLuint getTextID(std::size_t index);
 };

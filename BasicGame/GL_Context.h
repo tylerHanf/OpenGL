@@ -17,6 +17,7 @@ class GL_Context {
 
     int numVAOs = 1;
     int numVBOs = 2;
+
     GLuint vao[1];
     GLuint vbo[2];
 
@@ -40,8 +41,8 @@ class GL_Context {
         ~GL_Context();
         GLFWwindow* getWindow();
         //Load texture to gpu
-        void loadTexToGPU(std::vector<Texture*> *textures, std::vector<GLuint> *textIDs);
-        void loadVertsToGPU(std::vector<std::vector<float>> *verts, std::vector<std::vector<float>> *texels, std::vector<int> *vertIDs);
+        void loadTexToGPU(std::vector<Texture> &textures, std::vector<GLuint> &textIDs);
+        void loadVertsToGPU(std::vector<std::vector<float>> &verts, std::vector<std::vector<float>> &texels, std::vector<int> &vertIDs);
         GLuint* getVAO();
         GLuint* getVBO();
         void init();
@@ -49,7 +50,6 @@ class GL_Context {
         void display(ObjectData objData);
         void testSetup();
         void testTextLoad();
-
 };
 
 #endif

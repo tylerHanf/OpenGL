@@ -6,68 +6,69 @@
 #include <vector>
 #include <string>
 
-LoadData::LoadData(std::vector<std::string> *filepaths) {
-    vertices = new std::vector<std::vector<float>>();
-    texels = new std::vector<std::vector<float>>();
-    texturePaths = new std::vector<std::string>();
-    numVertices = new std::vector<int>();
-    textures = new std::vector<Texture*>();
-    textIDs = new std::vector<GLuint>();
-    vertIDs = new std::vector<int>();
+LoadData::LoadData(const std::vector<std::string> &filepaths) {
+    vertices = std::vector<std::vector<float>>();
+    texels = std::vector<std::vector<float>>();
+    texturePaths = std::vector<std::string>();
+    numVertices = std::vector<int>();
+    textures = std::vector<Texture>();
+    vertIDs = std::vector<int>();
     loadObj(filepaths);
+    textIDs = std::vector<GLuint>(texturePaths.size());
     loadTextures();
 }
 
 /**
  * TODO: Use folder name as object type identifier
  **/
-bool LoadData::loadObj(std::vector<std::string> *fileList) {
+bool LoadData::loadObj(const std::vector<std::string> &fileList) {
     Importer import;
-    for (const auto& file: *fileList ) {
+    for (const auto& file: fileList ) {
         import.readFile(file.c_str());
         std::vector<float> verts = import.getVertices();
-        numVertices->push_back(verts.size()/3);
-        vertices->push_back(verts);
-        texels->push_back(import.getTexels());
-        texturePaths->push_back(import.getTexturePath());
+        numVertices.push_back(verts.size()/3);
+        vertices.push_back(verts);
+        texels.push_back(import.getTexels());
+        texturePaths.push_back(import.getTexturePath());
         
     }
     return true;
 }
 
 bool LoadData::loadTextures() {
-    for (int i=0; i<texturePaths->size(); i++) {
+    for (int i=0; i<texturePaths.size(); i++) {
         Texture *newTexture = new Texture();
-        getPNGDim((*texturePaths)[i], &newTexture->width, &newTexture->height);
-        newTexture->textureData = SOIL_load_image((*texturePaths)[i].c_str(), &newTexture->width, &newTexture->height, 0, SOIL_LOAD_RGB);
-        textures->push_back(newTexture);
+        getPNGDim(texturePaths.at(i), &newTexture->width, &newTexture->height);
+        newTexture->textureData = SOIL_load_image(texturePaths.at(i).c_str(), &newTexture->width, &newTexture->height, 0, SOIL_LOAD_RGB);
+        textures.push_back(*newTexture);
     }
     return true;
 }
 
-std::vector<std::vector<float>> *LoadData::getVertices() const {
+std::vector<std::vector<float>> &LoadData::getVertices() {
     return vertices;
 }
 
-std::vector<std::vector<float>> *LoadData::getTexels() const {
+std::vector<std::vector<float>> &LoadData::getTexels() {
     return texels;
 }
 
-std::vector<Texture*> *LoadData::getTextures() {
+std::vector<Texture> &LoadData::getTextures() {
     return textures;
 }
 
-std::vector<GLuint> *LoadData::getTextIDs() const {
+std::vector<GLuint> &LoadData::getTextIDs() {
     return textIDs;
 }
 
-std::vector<int> *LoadData::getVertIDs() const {
+std::vector<int> &LoadData::getVertIDs() {
     return vertIDs;
 }
 
-std::vector<std::string> *LoadData::getTexturePaths() const {
+std::vector<std::string> &LoadData::getTexturePaths() {
     return texturePaths;
 }
+
 int LoadData::getNumVertices(std::size_t index) {
-    return (*numVertices)[index];
+    return numVertices[index];
 }

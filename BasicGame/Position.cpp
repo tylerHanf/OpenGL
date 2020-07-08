@@ -6,14 +6,14 @@
  * Default constructor
  **/
 Position::Position() {
-    position = glm::vec3(8.0f, 0.0f, 0.0f);
+    position = glm::vec4(8.0f, 1.0f, 1.0f, 1.0f);
 }
 
 /**
  * Position constructor takes floats to make a glm vec3
  **/
 Position::Position(float x, float y, float z) {
-    position = glm::vec3(x, y, z);
+    position = glm::vec4(x, y, z, 1.0f);
 }
 
 /**
@@ -27,16 +27,21 @@ Position::Position(const Position& otherPos) {
  * Uses glm::translate to move position
  **/
 void Position::move(Position moveBy) {
-    //position *= glm::translate(glm::mat4(1.0f), moveBy.posToVec3());
+    glm::mat4 translate = glm::translate(glm::mat4(1.0f), moveBy.posToVec3());
+    position = translate * position;
 }
 
 /**
  * Returns the vec3 value of the position
  **/
-glm::vec3 Position::posToVec3() {
+glm::vec4 Position::posToVec4() {
     return position;
 }
 
+glm::vec3 Position::posToVec3() {
+    glm::vec3 vec3 = glm::vec3(position.x, position.y, position.z);
+    return vec3;
+}
 /**
  * Fix assignment operator
  **/

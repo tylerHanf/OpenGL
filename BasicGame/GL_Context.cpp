@@ -15,7 +15,9 @@
 #include "LoadData.h"
 #include "GL_Context.h"
 
-GL_Context::GL_Context(LoadData *ld) { 
+GL_Context::GL_Context(LoadData *ld) :
+camera()
+{ 
     init();
     loadVertsToGPU(ld->getVertices(), ld->getTexels(), ld->getVertIDs());
     loadTexToGPU(ld->getTextures(), ld->getTextIDs());
@@ -50,7 +52,6 @@ void GL_Context::loadVertsToGPU(std::vector<std::vector<float>> &verts, std::vec
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, verts.at(0).size()*4, verts[0].data(), GL_STATIC_DRAW);
-    std::cout << verts.at(0).size() * 4 << std::endl;
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, (texels.at(0)).size()*4, texels[0].data(), GL_STATIC_DRAW);
@@ -66,7 +67,7 @@ void GL_Context::init() {
     if (glewInit() != GLEW_OK) { Debug().reportError("Failed to init glew"); }
     glfwSwapInterval(1);
     renderingProgram = createShaderProgram("vertShader.glsl", "fragShader.glsl");
-    camera = new Camera(Position(0.0f, 0.0f, 8.0f));
+    camera = Camera(Position(0.0f, 0.0f, 8.0f));
 }
 
 GLuint* GL_Context::getVAO() {
@@ -77,8 +78,8 @@ GLuint* GL_Context::getVBO() {
     return vbo;
 }
 
-void GL_Context::display(ObjectData objData) {
-    double currenTime = glfwGetTime();
+void GL_Context::display(ObjectData &objData) {
+    dt = glfwGetTime();
     Object* player = objData.getObject(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(renderingProgram);
@@ -91,7 +92,7 @@ void GL_Context::display(ObjectData objData) {
 
     pMat = glm::perspective(1.0472f, aspect, 0.1f, 1000.0f);
 
-    vMat = glm::lookAt(camera->getPosition(), player->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
+    vMat = glm::lookAt(camera.getPosition(), player->getPosition(), glm::vec3(0.0f, 1.0f, 0.0f));
     mMat = glm::translate(glm::mat4(1.0f), player->getPosition());
 
     mvMat = vMat * mMat;
@@ -116,10 +117,20 @@ void GL_Context::display(ObjectData objData) {
     glDrawArrays(GL_TRIANGLES, 0, player->getNumVertices());
 }
 
-bool GL_Context::renderLoop(ObjectData objData) {
-    while (!glfwWindowShouldClose(window)) {
-        display(objData);
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+bool GL_Context::runSingleFrame(ObjectData &objData) {
+    display(objData);
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+}
+
+bool GL_Context::windowShouldClose() {
+    return glfwWindowShouldClose(window);
+}
+
+void GL_Context::updateTime() {
+    dt = glfwGetTime();
+}
+
+float GL_Context::getTime() {
+    return dt;
 }

@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "Position.h"
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -16,13 +17,17 @@ Object::Object(std::size_t index, int vertCount)
     numVertices = vertCount;
 }
 
+Object::~Object() {
+    std::cout << "Deleting object" << std::endl;
+}
+
 Object* Object::createObject(std::size_t dataIndex, int vertCount) {
     Object* obj_p = new Object(dataIndex, vertCount);
     return obj_p;
 }
 
 void Object::move(Position moveBy) {
-    pos = moveBy;
+    pos.move(moveBy);
 }
 
 std::size_t Object::getDataIndex() {

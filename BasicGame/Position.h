@@ -8,7 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 class Position {
-    glm::vec3 position;
+    glm::vec4 position;
 
     public:
         Position();
@@ -16,6 +16,7 @@ class Position {
         Position(const Position& otherPos);
         void move(Position);
         //Returns vec3 version of position
+        glm::vec4 posToVec4();
         glm::vec3 posToVec3();
         //Handle assignment operator
         Position& operator= (const Position& otherPos);

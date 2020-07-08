@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "ObjectData.h"
 #include "Object.h"
@@ -13,23 +14,26 @@ ObjectData::ObjectData(LoadData* loadedData) {
     vertIDs = loadedData->getVertIDs();
     textIDs = loadedData->getTextIDs();
     for (int i=0; i<vertIDs.size(); i++) {
-        Object* newObject = new Object(i, loadedData->getNumVertices(i));
+        std::cout << "Adding object" << std::endl;
+        Object newObject = Object(i, loadedData->getNumVertices(i));
         objects.push_back(newObject);
-        err.displayObjectData(newObject);
+        err.displayObjectData(&newObject);
     }
+    std::cout << "Objects size: " << objects.size() << std::endl;
 }
 
 ObjectData::~ObjectData() {
-    /*for (int i=0; i<objects.size(); i++) {
-        delete objects.at(i);
-    }
-    */
+    std::cout << "Deleting object" << std::endl;
 }
 
 Object* ObjectData::getObject(std::size_t index) {
-    return objects[index];
+    return &(objects[index]);
 }
 
 GLuint ObjectData::getTextID(std::size_t index) {
     return textIDs[index];
+}
+
+int ObjectData::getNumObjects() {
+    return objects.size();
 }

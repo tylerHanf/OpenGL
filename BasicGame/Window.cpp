@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "Debug.h"
 #include <string>
+#include <iostream>
 #include "Window.h"
 
 Window::Window() {

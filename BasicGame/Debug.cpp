@@ -70,9 +70,13 @@ void Debug::displayObjectData(Object* obj) {
 }
 
 void Debug::displayPosition(Position pos) {
-    std::cout << "pos(" << pos.posToVec3().x << "," << pos.posToVec3().y << "," << pos.posToVec3().z << ")" << std::endl;
+    std::cout << "pos(" << pos.posToVec4().x << "," << pos.posToVec4().y << "," << pos.posToVec4().z << ")" << std::endl;
 }
 
 void Debug::displayPosition(glm::vec3 pos) {
     std::cout << "pos(" << pos.x << "," << pos.y << "," << pos.z << ")" << std::endl;
+}
+
+void Debug::displayNumObjects(ObjectData& objData) {
+    std::cout << "Number of Objects Made: " << objData.getNumObjects() << std::endl;
 }

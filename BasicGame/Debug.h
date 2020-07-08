@@ -5,6 +5,7 @@
 #include "LoadData.h"
 #include "Object.h"
 #include "Position.h"
+#include "ObjectData.h"
 
 class Debug {
     public:
@@ -14,6 +15,7 @@ class Debug {
         void displayObjectData(Object* obj);
         void displayPosition(Position pos);
         void displayPosition(glm::vec3 pos);
+        void displayNumObjects(ObjectData& objData);
 };
 
 #endif

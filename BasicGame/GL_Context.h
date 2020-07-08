@@ -29,7 +29,8 @@ class GL_Context {
     GLFWwindow* window;
     int width, height = 800;
     float aspect;
-    Camera *camera;
+    float dt;
+    Camera camera;
 
     //TESTING
     unsigned char* img;
@@ -46,10 +47,13 @@ class GL_Context {
         GLuint* getVAO();
         GLuint* getVBO();
         void init();
-        bool renderLoop(ObjectData objData);
-        void display(ObjectData objData);
+        bool runSingleFrame(ObjectData &objData);
+        void display(ObjectData &objData);
         void testSetup();
         void testTextLoad();
+        bool windowShouldClose();
+        void updateTime();
+        float getTime();
 };
 
 #endif

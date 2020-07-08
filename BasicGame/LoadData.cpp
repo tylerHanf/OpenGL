@@ -37,10 +37,10 @@ bool LoadData::loadObj(const std::vector<std::string> &fileList) {
 
 bool LoadData::loadTextures() {
     for (int i=0; i<texturePaths.size(); i++) {
-        Texture *newTexture = new Texture();
-        getPNGDim(texturePaths.at(i), &newTexture->width, &newTexture->height);
-        newTexture->textureData = SOIL_load_image(texturePaths.at(i).c_str(), &newTexture->width, &newTexture->height, 0, SOIL_LOAD_RGB);
-        textures.push_back(*newTexture);
+        Texture newTexture = Texture();
+        getPNGDim(texturePaths.at(i), &newTexture.width, &newTexture.height);
+        newTexture.textureData = SOIL_load_image(texturePaths.at(i).c_str(), &newTexture.width, &newTexture.height, 0, SOIL_LOAD_RGB);
+        textures.push_back(newTexture);
     }
     return true;
 }

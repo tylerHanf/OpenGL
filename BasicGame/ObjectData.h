@@ -12,13 +12,14 @@ class ObjectData {
 
     std::vector<int> vertIDs;
     std::vector<GLuint> textIDs;
-    std::vector<Object*> objects;
+    std::vector<Object> objects;
 
     public:
         ObjectData(LoadData* loadedData);
         ~ObjectData();
         Object* getObject(std::size_t index);
         GLuint getTextID(std::size_t index);
+        int getNumObjects();
 };
 
 #endif

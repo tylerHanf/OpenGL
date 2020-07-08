@@ -19,6 +19,7 @@ class Object {
     public:
         Object(Position initPos, std::size_t dataIndex, int vertCount);
         Object(std::size_t dataIndex, int vertCount);
+        ~Object();
         Object* createObject(std::size_t dataIndex, int vertCount);
         void move(Position);
         std::size_t getDataIndex();
